@@ -7,10 +7,12 @@ misal @Post()
 createbook(ini daleman) {return blabla bla}
 */
 //INI VERSI GLOBAL VALIDATOR non Route validator CEK DI main.ts
+
 import { Type } from 'class-transformer';
 import { IsInt, IsNotEmpty } from 'class-validator';
 export class CreateBookDto {
-  @IsNotEmpty() //ini string
+  @IsNotEmpty() //ini cek kosong ga dan harus nya ketika post host/books isi yang ga dicentang atau dicentang key misal di param pada key title tapi kosong value nya
+  //hasilnya ga mau alias error divalidasi teliti lagi soalnya sayang kan kalo ga divalidasi ini kosong value nya atau / key nya ga dicentang di param
   title: string;
   @IsNotEmpty()
   author: string;
