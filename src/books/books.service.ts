@@ -1,6 +1,7 @@
 import { Delete, Injectable, NotFoundException, Param } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateBookDto } from './dto/create-book.dto';
+import { FilterBookDto } from './dto/filter-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 
 //service ini adalah provider yak tempat bisnis logic ditempatkan kalo laravel di controller
@@ -15,20 +16,34 @@ export class BooksService {
   }
   */
   // ini buat nyari query khusus alias filter misal gw search author namanya budi aja yg ditampilkan
-
-  getBooks(title: string, author: string, category: string): any[] {
+  //ini saya tambahin jadi filter book dto jadi gini dan versi dto
+  getBooks(filter: FilterBookDto): any[] {
+    const { title, author, category, min_year, max_year } = filter;
     const books = this.books.filter((book) => {
-      let isMatch = true;
+      //let isMatch = true;
+      //bisa make cara ke 2 liat nih
+
       if (title && book.title != title) {
-        isMatch = false;
+        //isMatch = false;
+        return false;
       }
       if (author && book.author != author) {
-        isMatch = false;
+        //isMatch = false;
+        return false;
       }
       if (category && book.category != category) {
-        isMatch = false;
+        // isMatch = false;
+        return false;
       }
-      return isMatch; //jika cocok category dan book. ini maka ya bener namipilin bukan array kosongan
+
+      if (min_year && book.year < min_year) {
+        return false;
+      }
+      if (max_year && book.year > max_year) {
+        return false;
+      }
+      // return isMatch; //jika cocok category dan book. ini maka ya bener namipilin bukan array kosongan
+      return true;
     });
     return books;
   }

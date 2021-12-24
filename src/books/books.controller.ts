@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -15,6 +14,7 @@ import { BooksService } from './books.service';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { FilterBookDto } from './dto/filter-book.dto';
 //controller tuh cuma nerima request dan response gitu bersih dari si service
 //controller proses validasi juga disini
 @Controller('books')
@@ -23,12 +23,9 @@ export class BooksController {
   //: jadi dia tau tipe data BooksService dari si providers inject ke mari sini
   constructor(private booksService: BooksService) {}
   @Get() //ini kalo  mau ambil nama tertentu tambahin query
-  getBooks(
-    @Query('title') title: string,
-    @Query('author') author: string,
-    @Query('category') category: string,
-  ) {
-    return this.booksService.getBooks(title, author, category);
+  //ini versi ada dto dan terapkan filter-bookdto.ts
+  getBooks(@Query() filter: FilterBookDto) {
+    return this.booksService.getBooks(filter);
   }
 
   /*
@@ -42,11 +39,10 @@ export class BooksController {
   getBook(@Param('id') id: string) {
     return this.booksService.getBook(id);
   }
-  @Post() //versi ada dto tapi saya ganti non dto untuk coba scope year ini aja
-  //ini cuma berlaku di scope misal year aja nih year kan aslinya string kita conversi khusus year jadi int aja oke sipp
-  createBook(@Body('year', ParseIntPipe) year: number) {
-    console.log({ year });
-    // return this.booksService.createBook(payload);
+  @Post() //versi ada dto
+  createBook(@Body() payload: CreateBookDto) {
+    console.log(payload);
+    return this.booksService.createBook(payload);
   }
   @Post() //versi ada dto
   updateBook(@Param('id') id: string, @Body() payload: UpdateBookDto) {
