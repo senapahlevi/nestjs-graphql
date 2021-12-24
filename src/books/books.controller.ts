@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -41,14 +42,13 @@ export class BooksController {
   getBook(@Param('id') id: string) {
     return this.booksService.getBook(id);
   }
-  @Post() //versi ada dto
-  @UsePipes(ValidationPipe) //ini cuma berlaku di route ini aja asal main.ts dihapus
-  createBook(@Body() payload: CreateBookDto) {
-    console.log(payload);
-    return this.booksService.createBook(payload);
+  @Post() //versi ada dto tapi saya ganti non dto untuk coba scope year ini aja
+  //ini cuma berlaku di scope misal year aja nih year kan aslinya string kita conversi khusus year jadi int aja oke sipp
+  createBook(@Body('year', ParseIntPipe) year: number) {
+    console.log({ year });
+    // return this.booksService.createBook(payload);
   }
   @Post() //versi ada dto
-  @UsePipes(ValidationPipe) //ini cuma berlaku di route ini aja asal main.ts dihapus
   updateBook(@Param('id') id: string, @Body() payload: UpdateBookDto) {
     return this.booksService.updateBook(id, payload);
   }
