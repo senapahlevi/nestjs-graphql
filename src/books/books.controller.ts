@@ -7,6 +7,8 @@ import {
   Post,
   Put,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { v4 as uuidv4 } from 'uuid';
@@ -40,11 +42,13 @@ export class BooksController {
     return this.booksService.getBook(id);
   }
   @Post() //versi ada dto
+  @UsePipes(ValidationPipe) //ini cuma berlaku di route ini aja asal main.ts dihapus
   createBook(@Body() payload: CreateBookDto) {
     console.log(payload);
     return this.booksService.createBook(payload);
   }
   @Post() //versi ada dto
+  @UsePipes(ValidationPipe) //ini cuma berlaku di route ini aja asal main.ts dihapus
   updateBook(@Param('id') id: string, @Body() payload: UpdateBookDto) {
     return this.booksService.updateBook(id, payload);
   }
