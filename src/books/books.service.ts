@@ -1,5 +1,7 @@
 import { Delete, Injectable, NotFoundException, Param } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
+import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
 
 //service ini adalah provider yak tempat bisnis logic ditempatkan kalo laravel di controller
 @Injectable()
@@ -37,6 +39,8 @@ export class BooksService {
     //ini fungsi nya ketika dapet id dari si findBook kita copas terus cocokin muncul kah
     //dari ini ngambil nya {{host}}/books/:id ntar muncul form otomatis di params postman nya bukan body postman
   }
+  /*
+  //ini versi non dto wajib kek gini yak
   createBook(title: string, author: string, category: string) {
     this.books.push({
       id: uuidv4(),
@@ -45,12 +49,35 @@ export class BooksService {
       category,
     });
   }
+  */
+  createBook(createBookDto: CreateBookDto) {
+    //versi dto
+    const { title, author, category, year } = createBookDto;
+    this.books.push({
+      id: uuidv4(),
+      title,
+      author,
+      category,
+      year,
+    });
+  }
+  updateBook(id: string, updateBookDto: UpdateBookDto) {
+    const { title, author, category, year } = updateBookDto;
+    const bookIdx = this.findBookById(id);
+    this.books[bookIdx].title = title;
+    this.books[bookIdx].author = author;
+    this.books[bookIdx].category = category;
+    this.books[bookIdx].year = year;
+  }
+  /*
+  //versi non dto
   updateBook(id: string, title: string, author: string, category: string) {
     const bookIdx = this.findBookById(id);
     this.books[bookIdx].title = title;
     this.books[bookIdx].author = author;
     this.books[bookIdx].category = category;
   }
+  */
   findBookById(id: string) {
     const bookIdx = this.books.findIndex((book) => book.id === id);
     if (bookIdx === -1) {

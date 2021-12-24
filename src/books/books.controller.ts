@@ -10,7 +10,8 @@ import {
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { v4 as uuidv4 } from 'uuid';
-import { title } from 'process';
+import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
 //controller tuh cuma nerima request dan response gitu bersih dari si service
 //controller proses validasi juga disini
 @Controller('books')
@@ -38,6 +39,18 @@ export class BooksController {
   getBook(@Param('id') id: string) {
     return this.booksService.getBook(id);
   }
+  @Post() //versi ada dto
+  createBook(@Body() payload: CreateBookDto) {
+    console.log(payload);
+    return this.booksService.createBook(payload);
+  }
+  @Post() //versi ada dto
+  updateBook(@Param('id') id: string, @Body() payload: UpdateBookDto) {
+    return this.booksService.updateBook(id, payload);
+  }
+
+  /*
+  //ini kalo ga make dto jadi wajib nampilin daleman nya nah yang versi dto liat dibawah
   @Post()
   createBook(
     @Body('title') title: string,
@@ -46,6 +59,9 @@ export class BooksController {
   ) {
     return this.booksService.createBook(title, author, category);
   }
+  */
+  /*
+   //ini kalo ga make dto jadi wajib nampilin daleman nya nah yang versi dto liat dibawah
   @Put('/:id')
   updateBook(
     @Param('id') id: string,
@@ -55,6 +71,7 @@ export class BooksController {
   ) {
     return this.booksService.updateBook(id, title, author, category);
   }
+  */
   @Delete('/:id')
   deleteBook(@Param('id') id: string) {
     return this.booksService.deleteBook(id);
